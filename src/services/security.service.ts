@@ -1,4 +1,12 @@
 import bcrypt from 'bcrypt'
+import 'dotenv/config'
+import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
+
+if (!process.env.SECRET_KEY) {
+  throw new Error('Secret key not defined')
+}
+
+const SECRET_KEY: Secret = process.env.SECRET_KEY
 
 export async function hashPassword(
   plainText: string,
@@ -12,4 +20,22 @@ export async function verifyPassword(
   hashedPassword: string
 ): Promise<boolean> {
   return bcrypt.compare(password, hashedPassword)
+}
+
+export async function encodeToken(
+  payload: JwtPayload,
+  expiresInMinutes: number = 60
+): Promise<string> {
+  const token = jwt.sign(
+    {
+      data: payload,
+      exp: Math.floor(Date.now() / 1000) + 60 * expiresInMinutes
+    },
+    SECRET_KEY
+  )
+  return token
+}
+
+export async function decodeToken(token: string): Promise<JwtPayload | string> {
+  return jwt.verify(token, SECRET_KEY)
 }

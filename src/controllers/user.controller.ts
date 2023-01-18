@@ -7,6 +7,11 @@ export class UserController {
   /** Controllers to user
    *
    */
+
+  async findAll(req: Request, res: Response) {
+    const users = await userService.findAll()
+    res.json(users)
+  }
   async register(req: Request, res: Response) {
     const user = await userService.register(req.body)
     res.status(201).json(user)

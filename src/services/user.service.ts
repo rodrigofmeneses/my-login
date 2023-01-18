@@ -1,13 +1,21 @@
 import prisma from '../config/database.js'
-import { NotFoundError, UnauthorizedError } from '../helpers/api-errors.js'
+import { UnauthorizedError } from '../helpers/api-errors.js'
 import { User } from '../models/user.js'
 
-import { hashPassword, verifyPassword } from './security.service.js'
+import {
+  encodeToken,
+  hashPassword,
+  verifyPassword
+} from './security.service.js'
 
 export class UserService {
   /** Services for user
    *
    */
+
+  async findAll() {
+    return prisma.user.findMany()
+  }
   async register(user: User) {
     /** Register a User in Database
      *
@@ -39,7 +47,7 @@ export class UserService {
     })
 
     if (!userDatabase) {
-      throw new NotFoundError('User Not Found')
+      throw new UnauthorizedError('Username or password invalid')
     }
 
     const authorized = await verifyPassword(
@@ -48,9 +56,9 @@ export class UserService {
     )
 
     if (!authorized) {
-      throw new UnauthorizedError('User Not Authorized')
+      throw new UnauthorizedError('Username or password invalid')
     }
 
-    return 'Successfully Login'
+    return encodeToken(user)
   }
 }
