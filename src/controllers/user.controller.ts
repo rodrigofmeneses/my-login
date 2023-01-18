@@ -11,4 +11,8 @@ export class UserController {
     const user = await userService.register(req.body)
     res.status(201).json(user)
   }
+  async login(req: Request, res: Response) {
+    const acessToken = await userService.login(req.body)
+    res.json({ acessToken: acessToken })
+  }
 }
