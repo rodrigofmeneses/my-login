@@ -1,4 +1,4 @@
-import prisma from '../config/database.js'
+import { prisma } from '../config/database.js'
 import { UnauthorizedError } from '../helpers/api-errors.js'
 import { User } from '../models/user.js'
 

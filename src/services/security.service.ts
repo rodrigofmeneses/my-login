@@ -11,7 +11,7 @@ const SECRET_KEY: Secret = process.env.SECRET_KEY
 
 export async function hashPassword(
   plainText: string,
-  saltRounds: number = 10
+  saltRounds = 10
 ): Promise<string> {
   return bcrypt.hash(plainText, saltRounds)
 }
@@ -25,7 +25,7 @@ export async function verifyPassword(
 
 export async function encodeToken(
   payload: User,
-  expiresInMinutes: number = 60
+  expiresInMinutes = 60
 ): Promise<string> {
   const token = jwt.sign(
     {

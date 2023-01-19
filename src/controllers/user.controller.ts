@@ -10,7 +10,7 @@ export class UserController {
 
   async findAll(req: Request, res: Response) {
     const users = await userService.findAll()
-    res.json(req.user)
+    res.json(users)
   }
   async register(req: Request, res: Response) {
     const user = await userService.register(req.body)
