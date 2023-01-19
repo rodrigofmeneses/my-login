@@ -28,7 +28,7 @@ export class UserService {
       throw new Error('User already exist')
     }
 
-    user.password = await hashPassword(String(user.password))
+    user.password = await hashPassword(user.password)
 
     return prisma.user.create({
       data: {
@@ -51,7 +51,7 @@ export class UserService {
     }
 
     const authorized = await verifyPassword(
-      String(user.password),
+      user.password,
       userDatabase.password
     )
 

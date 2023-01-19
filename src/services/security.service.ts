@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import 'dotenv/config'
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
+import { User } from '../models/user'
 
 if (!process.env.SECRET_KEY) {
   throw new Error('Secret key not defined')
@@ -23,7 +24,7 @@ export async function verifyPassword(
 }
 
 export async function encodeToken(
-  payload: JwtPayload,
+  payload: User,
   expiresInMinutes: number = 60
 ): Promise<string> {
   const token = jwt.sign(
@@ -36,6 +37,7 @@ export async function encodeToken(
   return token
 }
 
-export async function decodeToken(token: string): Promise<JwtPayload | string> {
-  return jwt.verify(token, SECRET_KEY)
+export async function decodeToken(token: string): Promise<User> {
+  const { data } = jwt.verify(token, SECRET_KEY) as JwtPayload
+  return data
 }
